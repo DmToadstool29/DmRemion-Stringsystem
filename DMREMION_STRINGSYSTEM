@@ -1,0 +1,118 @@
+from tkinter import *
+root = Tk()
+root.title("DmRemion GUI Presentation")
+Label1 = Label(root,text="Stringsystem by DmRemion")
+Label1.pack()
+Input1 = Entry(root,width=50)
+Input1.pack()
+Options=[0,0,0]
+def Countwords():
+    global Options
+    Options[0] += 1
+    New1 = Tk()
+    New1.title("Counter Instance: "+str(Options[0]))
+    String1=str(Input1.get())
+    String1 += ' '
+    Words = dict()
+    Word = ''
+    Totalwords = 0
+    for x in String1:
+        if x.isalpha():
+            Word += x
+        else:
+            if Word == '':
+                continue
+            Totalwords += 1
+            if Word in Words:
+                Words[Word] += 1
+                Word = ''
+            else:
+                Words[Word] = 1
+                Word = ''
+    Label2 = Label(New1, text="Total words: "+str(Totalwords)).pack()
+    Label2 = Label(New1, text="Total unique words: " + str(len(Words))).pack()
+    Words1 = [(x,":",Words[x]) for x in Words]
+    SO=StringVar()
+    if len(Words1) == 0:
+        Drop1 = OptionMenu(New1,SO,"No words found")
+    else:
+        Drop1 = OptionMenu(New1,SO,*Words1)
+    Drop1.pack()
+    Label2 = Label(New1, text="Inputted string:").pack()
+    Label2 = Label(New1, text=String1, fg="green").pack()
+def FinderReplacer():
+    global Options
+    Options[1] += 1
+    New2 = Tk()
+    String2 = str(Input1.get())
+    String3 = String2
+    Label4 = Label(New2, text="N/A", fg="green")
+    Label5 = Label(New2, text="N/A", fg="green")
+    New2.title("Finder/Replacer Instance: "+str(Options[1]))
+    Label3 = Label(New2, text="Inputted string:").pack()
+    Label3 = Label(New2, text=String2, fg="green").pack()
+    Label3 = Label(New2, text="Input string A (Count/ToBeReplaced):").pack()
+    Input2 = Entry(New2, width=50)
+    Input2.pack()
+    Label3 = Label(New2, text="Input string B (Leave nothing if don't want to replace):").pack()
+    Input3 = Entry(New2, width=50)
+    Input3.pack()
+    def Execute():
+        StringA=str(Input2.get())
+        StringB=str(Input3.get())
+        if StringA == "":
+            Label5.config(text="N/A")
+            Label4.config(text="N/A")
+            return
+        Count=String2.count(StringA)
+        Label5.config(text=str(Count))
+        if StringB == "":
+            Label4.config(text="N/A")
+            return
+        String3 = String2.replace(StringA, StringB)
+        Label4.config(text=String3)
+    Button4 = Button(New2, text="Execute", command=Execute)
+    Button4.pack()
+    Label3 = Label(New2, text="Count of string found:").pack()
+    Label5.pack()
+    Label3 = Label(New2, text="Updated string:").pack()
+    Label4.pack()
+def Shifter():
+    global Options
+    Options[2] += 1
+    New3 = Tk()
+    New3.title("Shifter Instance: " + str(Options[2]))
+    String3 = str(Input1.get())
+    Label4= Label(New3, text="Inputted string:").pack()
+    Label4 = Label(New3, text=String3, fg="green").pack()
+    Label4 = Label(New3, text="Updated string:").pack()
+    Label5 = Label(New3, text="N/A", fg='green')
+    Label5.pack()
+    Label4 = Label(New3, text="Input integer to shift letters").pack()
+    Input5 = Entry(New3, width=50)
+    Input5.pack()
+    def Shifter2():
+        String4=""
+        StringA=str(Input5.get())
+        if (StringA.isnumeric() or (len(StringA) > 1 and StringA[0]=='-' and StringA[1:len(StringA)].isnumeric())):
+            StringA=int(StringA)
+        else:
+            Label5.config(text="N/A")
+            return
+        for i in String3:
+            if i.isupper():
+                String4+=chr((((ord(i)-65)+StringA)%26)+65)
+            elif i.islower():
+                String4 += chr((((ord(i) - 97) + StringA) % 26) + 97)
+            else:
+                String4 += i
+        Label5.config(text=String4)
+    Button5 = Button(New3, text="Shift letters", command=Shifter2)
+    Button5.pack()
+Button1=Button(root,text="Counter",command=Countwords)
+Button2=Button(root,text="Finder/Replacer",command=FinderReplacer)
+Button3=Button(root,text="Shifter",command=Shifter)
+Button1.pack()
+Button2.pack()
+Button3.pack()
+root.mainloop()
